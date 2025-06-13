@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Постановка задачи</title>
+</head>
+<body>
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h2 class="mb-0">
+                        {% if form.instance.pk %}Редактирование задачи{% else %}Создание новой задачи{% endif %}
+                    </h2>
+                </div>
+
+                <div class="card-body">
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Поле названия -->
+                        <div class="mb-3">
+                            <label for="{{ form.title.id_for_label }}" class="form-label">
+                                {{ form.title.label }}
+                            </label>
+                            {{ form.title}}
+                            {% if form.title.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.title.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Поле описания -->
+                        <div class="mb-3">
+                            <label for="{{ form.description.id_for_label }}" class="form-label">
+                                {{ form.description.label }}
+                            </label>
+                            {{ form.description}}
+                            <div class="form-text">Опишите задачу максимально подробно</div>
+                        </div>
+
+                        <!-- Поле статуса (только для редактирования) -->
+                        {% if form.instance.pk %}
+                        <div class="mb-3 form-check form-switch">
+                            {{ form.is_completed}}
+                            <label class="form-check-label" for="{{ form.is_completed.id_for_label }}">
+                                Задача выполнена
+                            </label>
+                        </div>
+                        {% endif %}
+
+                        <!-- Кнопки отправки формы -->
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Отмена
+                            </a>
+                            <button type="submit" class="btn btn-success">
+                                <i class="bi bi-check-circle"></i> Сохранить
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

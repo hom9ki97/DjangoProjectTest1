@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>Задачи</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Менеджер задач</h1>
+
+    <div class="row">
+        <!-- Колонка с невыполненными задачами -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-warning text-white">
+                    <h5 class="card-title mb-0">Не выполненные задачи</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for task in active_task%}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'task_manager:detail' task.id%}">{{task}}</a>
+                            <a href="{% url 'task_manager:completed' task.id%}" class="btn btn-sm btn-success">Выполнить</a>
+                        </li>
+                        {%endfor%}
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Колонка с выполненными задачами -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="card-title mb-0">Выполненные задачи</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        {% for task in completed_tasks%}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <a href="{% url 'task_manager:detail' task.id%}">{{task}}</a>
+                            <a href="{% url 'task_manager:completed' task.id%}" class="btn btn-sm btn-success">Вернуть в работу</a>
+                        </li>
+                        {%endfor%}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Блок с кнопками -->
+    <div class="row mt-4">
+        <div class="col-12 d-flex justify-content-center gap-3">
+            <a href="{% url 'task_manager:task_create'%}" class="btn btn-primary">Добавить задачу</a>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
