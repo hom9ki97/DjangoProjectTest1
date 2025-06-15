@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.views import generic
-from django.urls import reverse
+# from ..decorators.logging import log_request
+from .decorators.logging import log_request
 from .forms import TaskForm
 
 from .models import Task
@@ -13,7 +13,7 @@ from .models import Task
 #     def get_queryset(self):
 #         return Task.objects.all()
 
-
+@log_request
 def index(request):
     completed_task = Task.objects.filter(is_completed=True)
     active_task = Task.objects.filter(is_completed=False)
@@ -23,12 +23,12 @@ def index(request):
 
     return render(request, 'index.html', context)
 
-
+@log_request
 def detail(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     return render(request, 'detail.html', {'task': task})
 
-
+@log_request
 def add_and_save_task(request):
     if request.method == 'POST':
         form = TaskForm(request.POST)
@@ -43,7 +43,7 @@ def add_and_save_task(request):
         context = {'form': form}
         return render(request, 'task_create.html', context)
 
-
+@log_request
 def change_task(request, task_id):
     task_form = Task.objects.get(id=task_id)
     if request.method == 'POST':
@@ -59,7 +59,7 @@ def change_task(request, task_id):
         context = {'form': form}
         return render(request, 'task_create.html', context)
 
-
+@log_request
 def completed_task(request, task_id):
     task = Task.objects.get(id=task_id)
     if task.is_completed:
@@ -68,6 +68,7 @@ def completed_task(request, task_id):
         task.mark_as_completed()
     return redirect('task_manager:index')
 
+@log_request
 def delete_task(request, task_id):
     task = Task.objects.get(id=task_id)
     task.delete()
