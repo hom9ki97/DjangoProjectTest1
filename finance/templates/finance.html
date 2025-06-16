@@ -26,7 +26,7 @@
                 <div class="card balance-card">
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="bi bi-cash-stack"></i> Баланс</h5>
-                        <h2 class="card-text">25,000 ₽</h2>
+                        <h2 class="card-text">{{total}} ₽</h2>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
                 <div class="card income-card">
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="bi bi-graph-up-arrow"></i> Доход</h5>
-                        <h2 class="card-text">50,000 ₽</h2>
+                        <h2 class="card-text">{{pos_amount}} ₽</h2>
                     </div>
                 </div>
             </div>
@@ -42,7 +42,7 @@
                 <div class="card expense-card">
                     <div class="card-body text-center">
                         <h5 class="card-title"><i class="bi bi-graph-down-arrow"></i> Расход</h5>
-                        <h2 class="card-text">25,000 ₽</h2>
+                        <h2 class="card-text">{{neg_amount}} ₽</h2>
                     </div>
                 </div>
             </div>
@@ -57,12 +57,9 @@
                     </div>
                     <div class="card-body">
                         <div class="d-flex flex-wrap">
-                            <span class="badge bg-success category-badge"><i class="bi bi-cart"></i> Продукты</span>
-                            <span class="badge bg-info category-badge"><i class="bi bi-house"></i> Жильё</span>
-                            <span class="badge bg-warning category-badge"><i class="bi bi-car-front"></i> Транспорт</span>
-                            <span class="badge bg-danger category-badge"><i class="bi bi-phone"></i> Связь</span>
-                            <span class="badge bg-secondary category-badge"><i class="bi bi-bag"></i> Одежда</span>
-                            <span class="badge bg-dark category-badge"><i class="bi bi-cup-hot"></i> Кафе</span>
+                            {% for category in categories %}
+                                <span class="badge bg-{{category.color}} category-badge"><i class="bi {{category.icon}}"></i>{{category.name}}</span>
+                            {%endfor%}
                         </div>
                     </div>
                 </div>
@@ -76,41 +73,16 @@
                     </div>
                     <div class="card-body transaction-card">
                         <div class="list-group">
+                            {% for transaction in transactions%}
                             <div class="list-group-item d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h6 class="mb-1">Продукты</h6>
-                                    <small class="text-muted">12 мая 2023</small>
+                                    <h6 class="mb-1"><a class="btn btn-info" href="#">{{transaction.name}}</a></h6>
+                                    <small class="text-muted">{{transaction.date}}</small>
                                 </div>
-                                <span class="badge bg-danger rounded-pill">-3,500 ₽</span>
+                                <span class="badge bg-primary rounded-pill">{{transaction.amount}} ₽</span>
                             </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Зарплата</h6>
-                                    <small class="text-muted">10 мая 2023</small>
-                                </div>
-                                <span class="badge bg-success rounded-pill">+50,000 ₽</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Аренда</h6>
-                                    <small class="text-muted">5 мая 2023</small>
-                                </div>
-                                <span class="badge bg-danger rounded-pill">-20,000 ₽</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Кафе</h6>
-                                    <small class="text-muted">3 мая 2023</small>
-                                </div>
-                                <span class="badge bg-danger rounded-pill">-1,200 ₽</span>
-                            </div>
-                            <div class="list-group-item d-flex justify-content-between align-items-center">
-                                <div>
-                                    <h6 class="mb-1">Фриланс</h6>
-                                    <small class="text-muted">1 мая 2023</small>
-                                </div>
-                                <span class="badge bg-success rounded-pill">+15,000 ₽</span>
-                            </div>
+                            {%endfor%}
+
                         </div>
                     </div>
                 </div>
@@ -132,6 +104,9 @@
             </div>
         </div>
     </div>
+
+
+
 
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
