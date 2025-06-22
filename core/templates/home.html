@@ -1,64 +1,13 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Главная страница</title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Иконки Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <style>
-        .app-card {
-            transition: transform 0.3s;
-            height: 100%;
-        }
-        .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .hero-section {
-            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-            border-radius: 0 0 20px 20px;
-        }
-    </style>
-</head>
-<body>
-<!-- Шапка с навигацией -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" href="#">
-            <i class="bi bi-house-door"></i> МойПроект
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="#"><i class="bi bi-house"></i> Главная</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-info-circle"></i> О проекте</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="bi bi-envelope"></i> Контакты</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
+{% extends 'base.html' %}
 
-<!-- Герой-секция -->
-<section class="hero-section text-white py-5 mb-5">
-    <div class="container py-4 text-center">
-        <h1 class="display-4 fw-bold mb-3">Добро пожаловать!</h1>
-        <p class="lead mb-4">Выберите нужный раздел из доступных приложений</p>
-    </div>
-</section>
+{% block title %}Главная страница{% endblock %}
 
+{% block hero_title %}Добро пожаловать на наш сайт!{% endblock %}
+{% block hero_subtitle %}Лучший ресурс для обучения Django{% endblock %}
+
+{% block content %}
 <!-- Основной контент - карточки приложений -->
-<div class="container mb-5">
+<div class="container mb-3">
     <div class="row g-4">
         <!-- Карточка 1: Задачи -->
         {% for d in data%}
@@ -92,37 +41,5 @@
 
 
 <!-- Футер -->
-<footer class="bg-dark text-white py-4 mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <h5><i class="bi bi-info-circle"></i> О проекте</h5>
-                <p>Многофункциональная платформа для обучения программированию на Python + Django.</p>
-            </div>
-            <div class="col-md-3">
-                <h5>Разделы</h5>
-                <ul class="list-unstyled">
-                    <li><a href="#" class="text-white">Главная</a></li>
-                    <li><a href="#" class="text-white">Задачи</a></li>
-                    <li><a href="#" class="text-white">Блог</a></li>
-                </ul>
-            </div>
-            <div class="col-md-3">
-                <h5>Контакты</h5>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-envelope"></i> email@example.com</li>
-                    <li><i class="bi bi-telephone"></i> +7 (123) 456-7890</li>
-                </ul>
-            </div>
-        </div>
-        <hr>
-        <div class="text-center">
-            <small>© 2023 МойПроект. Все права защищены.</small>
-        </div>
-    </div>
-</footer>
-
-<!-- Bootstrap 5 JS (требуется для работы navbar-toggler, но не используется в функционале) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+{{ block.super }}  <!-- Если нужно сохранить контент из родительского шаблона -->
+{% endblock %}

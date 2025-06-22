@@ -1,8 +1,10 @@
-from django.shortcuts import render
-from unicodedata import category
+from django.shortcuts import render, redirect
+
 from django.db.models import Sum
 
 from .models import Transaction, Category
+
+from .forms import TransactionForm
 
 
 def index(request):
@@ -21,3 +23,13 @@ def index(request):
 
     }
     return render(request, 'finance.html', context)
+
+def create_transaction(request):
+    if request.method =='POST':
+        form = TransactionForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('finance:finance')
+    else:
+        form = TransactionForm()
+    return render(request, 'create_transaction.html', {'form': form})

@@ -1,5 +1,6 @@
-from django.forms import ModelForm, DecimalField
-from django.forms.widgets import Select
+from django.forms import ModelForm
+
+
 from .models import Task
 
 class TaskForm(ModelForm):
@@ -7,3 +8,6 @@ class TaskForm(ModelForm):
         model = Task
         fields = {'title', 'description', 'is_completed'}
         labels = {'title': 'Название задачи', 'description':'Подробное описание задачи'}
+
+
+

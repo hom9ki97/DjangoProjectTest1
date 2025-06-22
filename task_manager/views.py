@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404, redirect
-# from ..decorators.logging import log_request
+
 from .decorators.logging import log_request
 from .forms import TaskForm
 
