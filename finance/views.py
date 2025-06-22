@@ -24,12 +24,33 @@ def index(request):
     }
     return render(request, 'finance.html', context)
 
+
+def transaction_info(request, pk):
+    transaction = Transaction.objects.get(pk=pk)
+    return render(request, 'transaction_info.html', {'transaction': transaction})
+
+
 def create_transaction(request):
-    if request.method =='POST':
+    if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('finance:finance')
+            return redirect('finance:finance')
+        print(form.errors)
+
     else:
         form = TransactionForm()
     return render(request, 'create_transaction.html', {'form': form})
+
+
+def transaction_change(request, pk):
+    transaction = Transaction.objects.get(pk=pk)
+    if request.method == 'POST':
+        form = TransactionForm(request.POST, instance=transaction)
+        if form.is_valid():
+            form.save()
+            return redirect('finance:finance')
+    else:
+        form = TransactionForm(instance=transaction)
+    return render(request, 'create_transaction.html', {'form': form})
+

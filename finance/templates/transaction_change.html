@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Редактирование транзакции{% endblock %}
+
+{% block hero_title %}Редактирование транзакции{% endblock %}
+{% block hero_subtitle %}Измените данные финансовой операции{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square"></i> Форма редактирования
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <!-- Общие ошибки формы -->
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <!-- Тип транзакции -->
+                            <div class="col-md-6">
+                                <label class="form-label">Тип операции</label>
+                                <div class="btn-group w-100" role="group">
+                                    {% for radio in form.transaction_type %}
+                                    <div class="form-check">
+                                        {{ radio.tag }}
+                                        <label for="{{ radio.id_for_label }}" 
+                                               class="btn btn-outline-{% if radio.choice_value == 'income' %}success{% else %}danger{% endif %}">
+                                            <i class="bi bi-graph-{% if radio.choice_value == 'income' %}up{% else %}down{% endif %}-arrow"></i>
+                                            {{ radio.choice_label }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                {{ form.transaction_type.errors }}
+                            </div>
+
+                            <!-- Категория -->
+                            <div class="col-md-6">
+                                <label for="{{ form.category.id_for_label }}" class="form-label">
+                                    {{ form.category.label }}
+                                </label>
+                                {{ form.category }}
+                                {{ form.category.errors }}
+                            </div>
+
+                            <!-- Название -->
+                            <div class="col-12">
+                                <label for="{{ form.name.id_for_label }}" class="form-label">
+                                    {{ form.name.label }}
+                                </label>
+                                {{ form.name }}
+                                {{ form.name.errors }}
+                            </div>
+
+                            <!-- Сумма и дата -->
+                            <div class="col-md-6">
+                                <label for="{{ form.amount.id_for_label }}" class="form-label">
+                                    {{ form.amount.label }}
+                                </label>
+                                <div class="input-group">
+                                    {{ form.amount }}
+                                    <span class="input-group-text">₽</span>
+                                </div>
+                                {{ form.amount.errors }}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.date.id_for_label }}" class="form-label">
+                                    {{ form.date.label }}
+                                </label>
+                                {{ form.date }}
+                                {{ form.date.errors }}
+                            </div>
+
+                            <!-- Кнопки -->
+                            <div class="col-12 mt-4">
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'finance:finance' %}" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Назад
+                                    </a>
+                                    <div>
+                                        <button type="submit" class="btn btn-primary me-2">
+                                            <i class="bi bi-check-circle"></i> Сохранить
+                                        </button>
+                                        <a href="#" class="btn btn-danger">
+                                            <i class="bi bi-trash"></i> Удалить
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        border-radius: 10px;
+    }
+    .btn-group .btn {
+        flex: 1;
+    }
+    .form-control, .form-select {
+        padding: 0.75rem 1rem;
+    }
+</style>
+{% endblock %}

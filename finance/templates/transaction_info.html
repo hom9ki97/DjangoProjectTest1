@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% block title %}Транзакция #{{ transaction.id }}{% endblock %}
+
+{% block hero_title %}Детали транзакции{% endblock %}
+{% block hero_subtitle %}Просмотр полной информации о финансовой операции{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-header {% if transaction.transaction_type == 'income' %}bg-success{% else %}bg-danger{% endif %} text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-{% if transaction.transaction_type == 'income' %}graph-up-arrow{% else %}graph-down-arrow{% endif %}"></i>
+                        Транзакция #{{ transaction.id }}
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><i class="bi bi-card-heading"></i> Название:</h5>
+                            <p class="fs-4">{{ transaction.name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="bi bi-tag"></i> Категория:</h5>
+                            <span class="badge bg-{{ transaction.category.color }} fs-6">
+                                <i class="bi {{ transaction.category.icon }}"></i>
+                                {{ transaction.category.name }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h5><i class="bi bi-cash-stack"></i> Сумма:</h5>
+                            <p class="fs-3 {% if transaction.transaction_type == 'income' %}text-success{% else %}text-danger{% endif %}">
+                                {{ transaction.amount }} ₽
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5><i class="bi bi-calendar-event"></i> Дата:</h5>
+                            <p class="fs-4">{{ transaction.date|date:"d.m.Y" }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <h5><i class="bi bi-clock-history"></i> Статус:</h5>
+                        <div class="d-flex align-items-center">
+                            <span class="badge {% if transaction.transaction_type == 'income' %}bg-success{% else %}bg-danger{% endif %} me-2">
+                                {% if transaction.transaction_type == 'income' %}Доход{% else %}Расход{% endif %}
+                            </span>
+                            <small class="text-muted">
+                                Создано: {{ transaction.created_at|date:"d.m.Y H:i" }}
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-3 mt-3">
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'finance:finance' %}" class="btn btn-secondary">
+                                <i class="bi bi-arrow-left"></i> Назад к списку
+                            </a>
+                            <div>
+                                <a href="{% url 'finance:transaction_change' transaction.pk %}" class="btn btn-primary me-2">
+                                    <i class="bi bi-pencil-square"></i> Редактировать
+                                </a>
+                                <a href="#" class="btn btn-danger">
+                                    <i class="bi bi-trash"></i> Удалить
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Дополнительная информация -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Дополнительно</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-calendar-plus"></i> Дата создания:</h6>
+                            <p>{{ transaction.created_at|date:"d.m.Y H:i" }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-arrow-repeat"></i> Последнее изменение:</h6>
+                            <p>
+                                {% if transaction.updated_at %}
+                                    {{ transaction.updated_at|date:"d.m.Y H:i" }}
+                                {% else %}
+                                    Не изменялась
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0 !important;
+    }
+    h5 {
+        color: #6c757d;
+        font-size: 1.1rem;
+        margin-bottom: 0.5rem;
+    }
+    .fs-4 {
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
