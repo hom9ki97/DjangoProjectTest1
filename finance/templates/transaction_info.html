@@ -61,14 +61,18 @@
                             <a href="{% url 'finance:finance' %}" class="btn btn-secondary">
                                 <i class="bi bi-arrow-left"></i> Назад к списку
                             </a>
-                            <div>
-                                <a href="{% url 'finance:transaction_change' transaction.pk %}" class="btn btn-primary me-2">
+                            <form method="post" action="{% url 'finance:transaction_delete' transaction.id %}">
+                                <a href="{% url 'finance:transaction_change' transaction.pk %}"
+                                   class="btn btn-primary me-2">
                                     <i class="bi bi-pencil-square"></i> Редактировать
                                 </a>
-                                <a href="#" class="btn btn-danger">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">
                                     <i class="bi bi-trash"></i> Удалить
-                                </a>
-                            </div>
+                                </button>
+                            </form>
+
+
                         </div>
                     </div>
                 </div>
@@ -89,9 +93,9 @@
                             <h6><i class="bi bi-arrow-repeat"></i> Последнее изменение:</h6>
                             <p>
                                 {% if transaction.updated_at %}
-                                    {{ transaction.updated_at|date:"d.m.Y H:i" }}
+                                {{ transaction.updated_at|date:"d.m.Y H:i" }}
                                 {% else %}
-                                    Не изменялась
+                                Не изменялась
                                 {% endif %}
                             </p>
                         </div>

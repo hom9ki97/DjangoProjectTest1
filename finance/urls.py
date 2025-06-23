@@ -9,6 +9,7 @@ urlpatterns = [
     path('create_transacrion/', views.create_transaction, name='create_transaction'),
     path('transaction/<int:pk>/', views.transaction_info, name='transaction'),
     path('transaction_change/<int:pk>/', views.transaction_change, name='transaction_change'),
-    # path('transaction_delete/<int:pk>/', views.transaction_delete, name='transaction_delete'),
+    path('transaction_delete/<int:pk>/', views.transaction_delete, name='transaction_delete'),
+
 
 ]

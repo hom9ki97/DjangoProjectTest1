@@ -8,8 +8,10 @@ from .forms import TransactionForm
 
 
 def index(request):
-    pos_amount = Transaction.objects.filter(transaction_type='income').aggregate(Sum('amount'))['amount__sum'] or 0
-    neg_amount = Transaction.objects.filter(transaction_type='outcome').aggregate(Sum('amount'))['amount__sum'] or 0
+    pos_amount = round(
+        Transaction.objects.filter(transaction_type='income').aggregate(Sum('amount'))['amount__sum'] or 0, 2)
+    neg_amount = round(
+        Transaction.objects.filter(transaction_type='outcome').aggregate(Sum('amount'))['amount__sum'] or 0, 2)
     total = pos_amount - neg_amount
     categories = Category.objects.all()
     transactions = Transaction.objects.all()
@@ -54,3 +56,12 @@ def transaction_change(request, pk):
         form = TransactionForm(instance=transaction)
     return render(request, 'create_transaction.html', {'form': form})
 
+
+def transaction_delete(request, pk):
+    transaction = Transaction.objects.get(pk=pk)
+    if request.method == 'POST':
+        transaction.delete()
+        return redirect('finance:finance')
+
+    else:
+        return render(request, 'transaction_info.html', {'transaction': transaction})
