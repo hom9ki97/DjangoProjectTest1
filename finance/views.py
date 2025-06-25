@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 
 from django.db.models import Sum
 
@@ -65,3 +65,11 @@ def transaction_delete(request, pk):
 
     else:
         return render(request, 'transaction_info.html', {'transaction': transaction})
+
+def category_info(request, id):
+    transactions = Transaction.objects.filter(category_id=id, transaction_type='outcome').select_related('category')
+    total = round(transactions.aggregate(Sum('amount'))['amount__sum'] or 0, 2)
+    if transactions:
+        return render(request, 'category_info.html', {'transactions': transactions, 'total': total})
+    else:
+        return redirect('finance:finance')

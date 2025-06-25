@@ -56,7 +56,10 @@
                 <div class="card-body">
                     <div class="d-flex flex-wrap">
                         {% for category in categories %}
-                        <span class="badge bg-{{category.color}} category-badge"><i class="bi {{category.icon}}"></i>{{category.name}}</span>
+                        <a href="{% url 'finance:category_info' category.id %}">
+                        <span class="badge bg-{{category.color}} category-badge">
+                            <i class="bi {{category.icon}}"></i>{{category.name}}</span>
+                        </a>
                         {%endfor%}
                     </div>
                 </div>
