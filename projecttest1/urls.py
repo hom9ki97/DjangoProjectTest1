@@ -21,5 +21,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('tasks/', include('task_manager.urls')),
     path('finance/',include('finance.urls')),
+    path('keys/',include('keys.urls')),
     path('',include('core.urls'))
 ]

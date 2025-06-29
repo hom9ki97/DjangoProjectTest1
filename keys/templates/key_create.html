@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавление нового пользователя{% endblock %}
+
+{% block hero_title %}
+<i class="bi bi-person-plus"></i> Добавление информации о пользователе
+{% endblock %}
+
+{% block hero_subtitle %}
+Заполните форму для создания информации о пользователе
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-card-checklist"></i> Форма регистрации</h5>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                        {% endif %}
+
+                        <div class="row g-3">
+                            <!-- Имя -->
+                            <div class="col-md-6">
+                                <label for="{{ form.first_name.id_for_label }}" class="form-label">
+                                    {{ form.first_name.label }}
+                                </label>
+                                {{ form.first_name }}
+                                {{ form.first_name.errors }}
+                            </div>
+
+                            <!-- Фамилия -->
+                            <div class="col-md-6">
+                                <label for="{{ form.last_name.id_for_label }}" class="form-label">
+                                    {{ form.last_name.label }}
+                                </label>
+                                {{ form.last_name }}
+                                {{ form.last_name.errors }}
+                            </div>
+
+                            <!-- Email -->
+                            <div class="col-12">
+                                <label for="{{ form.email.id_for_label }}" class="form-label">
+                                    {{ form.email.label }}
+                                </label>
+                                {{ form.email }}
+                                {{ form.email.errors }}
+                            </div>
+
+                            <!-- Номер карты -->
+                            <div class="col-12">
+                                <label for="{{ form.card_number.id_for_label }}" class="form-label">
+                                    {{ form.card_number.label }}
+                                </label>
+                                {{ form.card_number }}
+                                <small class="text-muted">Формат: XXXX XXXX XXXX XXXX</small>
+                                {{ form.card_number.errors }}
+                            </div>
+
+                            <!-- Кнопки -->
+                            <div class="col-12 mt-4">
+                                <div class="d-flex justify-content-between">
+                                    <a href="{% url 'keys:keys' %}" class="btn btn-secondary">
+                                        <i class="bi bi-arrow-left"></i> Отмена
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="bi bi-save"></i> Сохранить
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

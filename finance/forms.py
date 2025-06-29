@@ -10,9 +10,9 @@ class TransactionForm(ModelForm):
         widgets = {
             'date': DateInput(
                 attrs={
-                    'type': 'date',  # Включает встроенный календарь
-                    'class': 'form-control',  # Стили Bootstrap
+                    'type': 'date',
+                    'class': 'form-control',
                 },
-                format='%Y-%m-%d'  # Формат даты для HTML5
+                format='%Y-%m-%d'
             ),
         }

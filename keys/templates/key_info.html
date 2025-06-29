@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Пользователь {{ userdata.first_name }} {{ userdata.last_name }}{% endblock %}
+
+{% block hero_title %}
+<i class="bi bi-person-badge"></i> {{ userdata.first_name }} {{ userdata.last_name }}
+{% endblock %}
+
+{% block hero_subtitle %}
+Полная информация о пользователе
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle"></i> Основная информация</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-person"></i> Имя:</h6>
+                            <p>{{ user_data.first_name }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6><i class="bi bi-person"></i> Фамилия:</h6>
+                            <p>{{ user_data.last_name }}</p>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <h6><i class="bi bi-envelope"></i> Email:</h6>
+                        <p>{{ user_data.email }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><i class="bi bi-credit-card"></i> Номер карты:</h6>
+                        <p>{{ user_data.card_number }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-clock-history"></i> Системная информация</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <h6><i class="bi bi-calendar-plus"></i> Дата создания:</h6>
+                        <p>{{ user_data.created_at|date:"d.m.Y H:i" }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><i class="bi bi-link"></i> ID записи:</h6>
+                        <p>{{ user_data.id }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><i class="bi bi-key"></i> Публичный ключ:</h6>
+                        <p>{{ user_data.keys.public_key }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <h6><i class="bi bi-key-fill"></i> Приватный ключ:</h6>
+                        <p>{{ user_data.keys.private_key }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'keys:keys' %}" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Назад к списку
+        </a>
+
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Список пользователей{% endblock %}
+
+{% block hero_title %}
+<i class="bi bi-people-fill"></i> Создание ключей
+{% endblock %}
+
+{% block hero_subtitle %}
+Список всех публичных и приватных ключей пользователей
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h3><i class="bi bi-list-ul"></i> Список пользователей</h3>
+        <div class="ms-auto">
+            <a href="{% url 'core:index' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Назад
+            </a>
+            <a href="{% url 'keys:add_user' %}" class="btn btn-success ms-2">
+                <i class="bi bi-plus-circle"></i> Добавить пользователя
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="bi bi-table"></i> Пользователи системы</h5>
+                <span class="badge bg-light text-dark">{{ user_data|length }} записей</span>
+            </div>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th>Имя</th>
+                        <th>Фамилия</th>
+                        <th>Номер карты</th>
+                        <th>Дата создания</th>
+                        <th>Публичный ключ</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in user_data %}
+
+                    <tr>
+                        <td>{{ user.first_name }}</td>
+                        <td>{{ user.last_name }}</td>
+                        <td>{{ user.mask_card_number }}</td>
+                        <td>{{ user.created_at|date:"d.m.Y H:i" }}</td>
+                        <td style="max-width: 300px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                            {% if user.keys %}
+                            {{ user.keys.public_key|truncatechars:30 }}
+                            {% else %}
+                            Нет ключей
+                            {% endif %}
+                        </td>
+                        <td class="text-end">
+                            <a href="{% url 'keys:user_info' user.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-eye"></i> Подробнее
+                            </a>
+                            {% if not user.keys %}
+                            <a href="{% url 'keys:create_key' user.pk %}" class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-plus-circle"></i> Добавить ключи
+                            </a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            <i class="bi bi-exclamation-circle display-6"></i>
+                            <p class="mt-2 mb-0">Нет зарегистрированных пользователей</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .table-responsive {
+        max-height: 500px;
+        overflow-y: auto;
+    }
+    .table thead th {
+        position: sticky;
+        top: 0;
+        background-color: #f8f9fa;
+        z-index: 10;
+    }
+</style>
+{% endblock %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'task_manager',
     'core',
     'finance',
+    'keys',
 ]
 
 MIDDLEWARE = [
