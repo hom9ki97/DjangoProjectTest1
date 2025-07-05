@@ -18,11 +18,15 @@
                     <h5 class="card-title mb-0">Не выполненные задачи</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
+                    <ul class="list-group" id="active-tasks">
                         {% for task in active_task%}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{% url 'task_manager:detail' task.id%}">{{task}}</a>
-                            <a href="{% url 'task_manager:completed' task.id%}" class="btn btn-sm btn-success">Выполнить</a>
+                            <button class="btn btn-sm btn-success complete-btn"
+                                    data-task-id="{{ task.id }}"
+                                    data-action="complete">
+                                Выполнить
+                            </button>
                         </li>
                         {%endfor%}
 
@@ -38,11 +42,15 @@
                     <h5 class="card-title mb-0">Выполненные задачи</h5>
                 </div>
                 <div class="card-body">
-                    <ul class="list-group">
+                    <ul class="list-group" id="completed-tasks">
                         {% for task in completed_tasks%}
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <a href="{% url 'task_manager:detail' task.id%}">{{task}}</a>
-                            <a href="{% url 'task_manager:completed' task.id%}" class="btn btn-sm btn-success">Вернуть в работу</a>
+                            <button class="btn btn-sm btn-warning complete-btn"
+                                    data-task-id="{{ task.id }}"
+                                    data-action="incomplete">
+                                Вернуть в работу
+                            </button>
                         </li>
                         {%endfor%}
                     </ul>
@@ -58,6 +66,96 @@
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    // Функция-обработчик клика
+    async function handleTaskClick() {
+        const button = this;
+        const taskId = button.dataset.taskId;
+        const listItem = button.closest('li');
+
+        try {
+            button.disabled = true;
+
+            const response = await fetch(`/tasks/api/task/${taskId}/toggle/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCookie('csrftoken'),
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            // Проверяем существование элементов
+            const targetListId = data.is_completed ? 'completed-tasks' : 'active-tasks';
+            const targetList = document.getElementById(targetListId);
+
+            if (!targetList) {
+                throw new Error(`Target list #${targetListId} not found`);
+            }
+
+            // Удаляем элемент
+            if (listItem && listItem.parentNode) {
+                listItem.remove();
+            }
+
+            // Создаем новую разметку
+            const newAction = data.is_completed ? 'incomplete' : 'complete';
+            const newButtonClass = data.is_completed ? 'btn-warning' : 'btn-success';
+            const newButtonText = data.is_completed ? 'Вернуть в работу' : 'Выполнить';
+
+            const newItem = document.createElement('li');
+            newItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+            newItem.dataset.taskId = data.id;
+            newItem.innerHTML = `
+                <a href="/tasks/${data.id}/">${data.title}</a>
+                <button class="btn btn-sm ${newButtonClass} complete-btn"
+                        data-task-id="${data.id}"
+                        data-action="${newAction}">
+                    ${newButtonText}
+                </button>
+            `;
+
+            // Добавляем обработчик события
+            newItem.querySelector('.complete-btn').addEventListener('click', handleTaskClick);
+
+            // Добавляем в DOM
+            targetList.appendChild(newItem);
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Ошибка: ${error.message}`);
+        } finally {
+            button.disabled = false;
+        }
+    }
+
+    // Инициализация обработчиков
+    document.querySelectorAll('.complete-btn').forEach(button => {
+        button.addEventListener('click', handleTaskClick);
+    });
+});
+</script>
 
 
 {{ block.super }}  <!-- Если нужно сохранить контент из родительского шаблона -->

@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'core',
     'finance',
     'keys',
+    'grade',
 ]
 
 MIDDLEWARE = [

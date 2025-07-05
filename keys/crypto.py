@@ -4,9 +4,9 @@ import hashlib
 import base64
 
 def generate_keys(data:dict):
-    user_data_str = (f'{data.get('name')}{data.get('surname')}'
-                     f'{data.get('email')}{data.get('card_number')}'
-                     f'{data.get('date')}')
+    user_data_str = (f"{data.get('name')}{data.get('surname')}"
+                     f"{data.get('email')}{data.get('card_number')}"
+                     f"{data.get('date')}")
     seed = hashlib.sha256(user_data_str.encode()).digest()
 
     private_key = create_private_key(seed)

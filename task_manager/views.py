@@ -1,7 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .decorators.logging import log_request
 from .forms import TaskForm
+from .serializers import TaskSerializer
 
 from .models import Task
 
@@ -23,10 +26,12 @@ def index(request):
 
     return render(request, 'index.html', context)
 
+
 @log_request
 def detail(request, task_id):
     task = get_object_or_404(Task, pk=task_id)
     return render(request, 'detail.html', {'task': task})
+
 
 @log_request
 def add_and_save_task(request):
@@ -42,6 +47,7 @@ def add_and_save_task(request):
         form = TaskForm()
         context = {'form': form}
         return render(request, 'task_create.html', context)
+
 
 @log_request
 def change_task(request, task_id):
@@ -59,14 +65,29 @@ def change_task(request, task_id):
         context = {'form': form}
         return render(request, 'task_create.html', context)
 
+
+@api_view(['POST'])
+@log_request
+def completed_task_rest(request, task_id):
+    if request.method == 'POST':
+        task = get_object_or_404(Task, id=task_id)
+        if task.is_completed:
+            task.mark_as_incomplete()
+        else:
+            task.mark_as_completed()
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
 @log_request
 def completed_task(request, task_id):
-    task = Task.objects.get(id=task_id)
+    task = get_object_or_404(Task, id=task_id)
     if task.is_completed:
         task.mark_as_incomplete()
     else:
         task.mark_as_completed()
     return redirect('task_manager:index')
+
 
 @log_request
 def delete_task(request, task_id):
